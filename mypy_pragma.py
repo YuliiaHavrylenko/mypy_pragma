@@ -3,17 +3,17 @@ import os
 import sys
 
 FOLDER_PATH = "/Users/volt/Coding/Projects/mypy_pragma/files/"
+MYPY = "# mypy: enable-option"
 
 
 def add_mypy(files_to_modify):
-    mypy = "# mypy: enable-option"
     for filename in files_to_modify:
         filepath = os.path.join(FOLDER_PATH, filename)
         # flag to track if mypy has been added to the file
         added_mypy = False
         # check if mypy already in file
         with open(filepath) as f:
-            if mypy in f.read():
+            if MYPY in f.read():
                 print(f"Skipping file: {filename}. '# mypy: enable-option' already exists.")
                 continue
         # if mypy not in file, add it after top level module comments
@@ -29,12 +29,11 @@ def add_mypy(files_to_modify):
 
 
 def remove_mypy(files_to_modify):
-    mypy_line = "# mypy: enable-option"
     for filename in files_to_modify:
         filepath = os.path.join(FOLDER_PATH, filename)
         with fileinput.FileInput(filepath, inplace=True) as file:
             for line in file:
-                if mypy_line in line:
+                if MYPY in line:
                     continue  # skip line if mypy pragma exists
                 print(line, end="")
 
